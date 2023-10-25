@@ -46,7 +46,7 @@ spec:
         image: docker.io/saurabh2204/user-management-service:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 8899
+        - containerPort: 8898
         resources:
           limits:
             cpu: 500m
