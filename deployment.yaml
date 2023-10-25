@@ -1,0 +1,54 @@
+apiVersion: v1
+
+kind: Service 
+
+metadata:
+  name: user-management-service
+  labels:
+    app: user-management-service-svc-label
+
+spec:
+  ports:
+  - port: 8082
+    name: http
+
+  selector:
+    app: user-management-service-v1-v2
+
+  type: LoadBalancer
+
+---
+
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: user-management-service-deployment-v1
+  labels:
+    app: user-management-service-dep-label
+
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: user-management-service-v1-v2
+
+  template: # template for the pods
+    metadata:
+      labels:
+        app: user-management-service-v1-v2
+        version: v1
+
+    spec:
+      containers:
+      - name: user-management-service-ver1
+        image: docker.io/saurabh2204/user-management-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8899
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m        
