@@ -43,7 +43,7 @@ public class UserManagementService {
 	}
 	public List<Admin> getAllAdmin() {
 
-		String sql = "SELECT * FROM Admin";
+		String sql = "SELECT * FROM ADMIN";
 
 		List<Admin> admins = new ArrayList<>();
 
@@ -151,7 +151,7 @@ public class UserManagementService {
 
 	public String addAdmin(Admin emp) {
 
-		String query = "INSERT INTO `springbootdb`.`Admin` (`roll_no`, `emp_name`, `emp_region`, `org_role`, `e_mail_id`) VALUES ('"
+		String query = "INSERT INTO `springbootdb`.`ADMIN` (`roll_no`, `emp_name`, `emp_region`, `org_role`, `e_mail_id`) VALUES ('"
 				+ emp.getRoll_no() + "', '" + emp.getEmp_name() + "', '" + emp.getEmp_region() + "', '"
 				+ emp.getOrg_role() + "', '" + emp.getE_mail_id()  + "');";
 
@@ -161,7 +161,7 @@ public class UserManagementService {
 
 	public String removeAdmin(Admin emp) {
 
-		String query= "DELETE from `springbootdb`.`Admin` WHERE roll_no = "+emp.getRoll_no() +";";
+		String query= "DELETE from `springbootdb`.`ADMIN` WHERE roll_no = "+emp.getRoll_no() +";";
 
 		jdbc.execute(query);
 		return "Admin entry deleted Successfully";
