@@ -141,13 +141,25 @@ public class UserManagementService {
 		jdbc.execute(query);
 		return "Region entry created Successfully";
 	}
-	public String removeEmp(Employee emp) {
 
-		String query= "DELETE from `springbootdb`.`Employee` WHERE roll_no = "+emp.getRoll_no()+";";
+	
+	public String removeEmp(List<String> slotIdList) {
+	    if (slotIdList.isEmpty()) {
+	        return "No admin to delete";
+	    }
 
-		jdbc.execute(query);
-		return "Employee entry deleted Successfully";
+	    // Create a comma-separated list of slot IDs
+	    String slotIds = String.join(",", slotIdList);
+
+	    String query = "DELETE FROM `springbootdb`.`Employee` WHERE id IN (" + slotIds + ");";
+
+	    jdbc.execute(query);
+
+	    return "Admin entries " + slotIdList + " deleted successfully";
 	}
+
+	
+	
 
 	public String addAdmin(Admin emp) {
 
@@ -159,13 +171,24 @@ public class UserManagementService {
 		return "Admin entry created Successfully";
 	}
 
-	public String removeAdmin(Admin emp) {
 
-		String query= "DELETE from `springbootdb`.`ADMIN` WHERE roll_no = "+emp.getRoll_no() +";";
 
-		jdbc.execute(query);
-		return "Admin entry deleted Successfully";
+	public String removeAdmin(List<String> slotIdList) {
+	    if (slotIdList.isEmpty()) {
+	        return "No admin to delete";
+	    }
+
+	    // Create a comma-separated list of slot IDs
+	    String slotIds = String.join(",", slotIdList);
+
+	    String query = "DELETE FROM `springbootdb`.`ADMIN` WHERE id IN (" + slotIds + ");";
+
+	    jdbc.execute(query);
+
+	    return "Admin entries " + slotIdList + " deleted successfully";
 	}
-		
 
+	
+	
+	
 }

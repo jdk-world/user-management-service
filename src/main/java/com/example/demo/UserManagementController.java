@@ -85,16 +85,18 @@ public class UserManagementController {
 
 	}
 	
+	
 	@RequestMapping(value = "/remove-emp", method = RequestMethod.POST)
 	@ResponseBody
-	public String removeUser(@RequestBody Employee empModel)
-			throws ParseException, IOException, GeneralSecurityException {
-		String msg = "";
-		msg = userManagementService.removeEmp(empModel);
-
-		return msg;
+	public String removeEmp(@RequestBody List<String> slotIdList)
+				throws ParseException, IOException, GeneralSecurityException {
+		
+		String report = userManagementService.removeEmp(slotIdList);
+		return report;
 
 	}
+	
+	
 	@RequestMapping(value = "/add-admin", method = RequestMethod.POST)
 	@ResponseBody
 	public String addAdmin(@RequestBody Admin adminModel)
@@ -107,17 +109,15 @@ public class UserManagementController {
 
 	}
 
+
 	@RequestMapping(value = "/remove-admin", method = RequestMethod.POST)
 	@ResponseBody
-	public String removeAdmin(@RequestBody Admin adminModel)
-			throws ParseException, IOException, GeneralSecurityException {
-		String msg = "";
-		msg = userManagementService.removeAdmin(adminModel);
-
-		return msg;
+	public String removeAdmin(@RequestBody List<String> slotIdList)
+				throws ParseException, IOException, GeneralSecurityException {
+		
+		String report = userManagementService.removeAdmin(slotIdList);
+		return report;
 
 	}
-
-
 
 }
