@@ -9,7 +9,16 @@ public class Employee {
     private String patch_compliance;
     private String date_of_completion;
     private String e_mail_id;
+    private String host_name;
 
+
+    
+    public String getHost_name() {
+		return host_name;
+	}
+	public void setHost_name(String host_name) {
+		this.host_name = host_name;
+	}
 
     
     public int getRoll_no() {

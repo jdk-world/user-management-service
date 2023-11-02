@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -46,6 +47,12 @@ public class UserManagementController {
     @GetMapping("/role")
     public List<Roles> getRoles() {
         return userManagementService.getAllRoles();
+    }
+    
+    
+    @GetMapping("/emp-asset")
+    public HashMap<Integer, String> getEmpAsset() {
+        return userManagementService.getAllEmpAssetMap();
     }
     
     

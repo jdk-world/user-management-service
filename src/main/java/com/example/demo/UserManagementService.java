@@ -1,11 +1,13 @@
 package com.example.demo;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,10 +16,26 @@ public class UserManagementService {
 	@Autowired
 	JdbcTemplate jdbc;
 
+	private static final String DEFAULT_APPLICABLE_PATCH_ID = "5";
+	private static final String DEFAULT_PATCH_COMPLIANCE = "Non-compliant";
+	public static final String DEFAULT_DATE_COMPLETION = "1900-01-01";//2023-11-02T11:01//2023-10-01
+
+	
 	public List<Employee> getAllEmp() {
 
 
 		String sql = "SELECT DISTINCT roll_no, emp_name, emp_region, e_mail_id  FROM springbootdb.Employee";
+		String sql2 = "SELECT roll_no, asset_id FROM springbootdb.EMPLOYEE_ASSET";
+		List<Map<String, Object>> rows2 = jdbc.queryForList(sql2);
+
+		HashMap<Integer, String> assetMap = new HashMap<>();
+
+		for (Map<String, Object> row : rows2) {
+		    Integer rollNo = ((Integer) row.get("roll_no"));
+		    String assetId = row.get("asset_id").toString();
+		    assetMap.put(rollNo, assetId);
+		}
+
 
 		List<Employee> emps = new ArrayList<>();
 
@@ -25,7 +43,9 @@ public class UserManagementService {
 
 		for (Map row : rows) {
 			Employee obj = new Employee();
-			obj.setRoll_no(((Integer) row.get("roll_no")));
+			Integer rollNo = ((Integer) row.get("roll_no"));
+			
+			obj.setRoll_no(rollNo);
 
 			obj.setEmp_name(((String) row.get("emp_name")).toString());
 			obj.setEmp_region(((String) row.get("emp_region")).toString());
@@ -35,6 +55,7 @@ public class UserManagementService {
 
 			obj.setE_mail_id(((String) row.get("e_mail_id")).toString());
 
+			obj.setHost_name(assetMap.get(rollNo));
 			emps.add(obj);
 		}
 
@@ -109,17 +130,47 @@ public class UserManagementService {
 
 	}
 
+	public HashMap<Integer, String> getAllEmpAssetMap() {
 
+		String sql = "SELECT * FROM EMPLOYEE_ASSET";
+
+		HashMap<Integer, String> map = new HashMap<>();
+		List<Map<String, Object>> rows = jdbc.queryForList(sql);
+
+		for (Map row : rows) {
+			Integer roleId = (Integer) row.get("roll_no");
+
+			String asset_id = row.get("asset_id").toString();
+
+			map.put(roleId, asset_id);
+		}
+
+		return map;
+
+	}
 	
 	public String addEmp(Employee emp) {
 
-		String query = "INSERT INTO `springbootdb`.`Employee` (`roll_no`, `emp_name`, `emp_region`, `applicable_patch_id`, `patch_compliance`, `date_of_completion`, `e_mail_id`) VALUES ('"
+		String applicable_patch_id = StringUtils.isBlank(emp.getApplicable_patch_id()) ? DEFAULT_APPLICABLE_PATCH_ID : emp.getApplicable_patch_id();
+		String patch_compliance = StringUtils.isBlank(emp.getPatch_compliance()) ? DEFAULT_PATCH_COMPLIANCE : emp.getPatch_compliance();		
+	    String date_of_completion = StringUtils.isBlank(emp.getDate_of_completion()) ? DEFAULT_DATE_COMPLETION : "'" + emp.getDate_of_completion() + "'";		
+
+	    
+	    String query = "INSERT INTO `springbootdb`.`Employee` (`roll_no`, `emp_name`, `emp_region`, `applicable_patch_id`, `patch_compliance`, `date_of_completion`, `e_mail_id`) VALUES ('"
 				+ emp.getRoll_no() + "', '" + emp.getEmp_name() + "', '" + emp.getEmp_region() + "', '"
-				+ emp.getApplicable_patch_id() + "', '" + emp.getPatch_compliance() + "', '"
-				+ emp.getDate_of_completion() + "', '" + emp.getE_mail_id() + "');";
+				+ applicable_patch_id + "', '" + patch_compliance + "', '"
+				+ date_of_completion + "', '" + emp.getE_mail_id() + "');";
 
 		jdbc.execute(query);
-		return "Employee entry created Successfully";
+		
+		String query2 = "INSERT INTO `springbootdb`.`EMPLOYEE_ASSET` (`roll_no`, `asset_id`) VALUES ('"
+				+ emp.getRoll_no() + "', '" + emp.getHost_name() + "');";
+
+		jdbc.execute(query2);
+
+		
+		
+		return "Employee entry created Successfully, Emp Id : " + emp.getRoll_no();
 	}
 
 	
