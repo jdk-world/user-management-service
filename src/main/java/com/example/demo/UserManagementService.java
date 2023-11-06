@@ -16,9 +16,9 @@ public class UserManagementService {
 	@Autowired
 	JdbcTemplate jdbc;
 
-	private static final String DEFAULT_APPLICABLE_PATCH_ID = "5";
-	private static final String DEFAULT_PATCH_COMPLIANCE = "Non-compliant";
-	public static final String DEFAULT_DATE_COMPLETION = "1900-01-01";//2023-11-02T11:01//2023-10-01
+	private static final String DEFAULT_APPLICABLE_PATCH_ID = "1";
+	private static final String DEFAULT_PATCH_UNCOMPLIANCE = "Non-compliant";
+	public static final String DEFAULT_DATE_UNCOMPLETION = "1900-01-01";//2023-11-02T11:01//2023-10-01
 
 	
 	public List<Employee> getAllEmp() {
@@ -152,8 +152,8 @@ public class UserManagementService {
 	public String addEmp(Employee emp) {
 
 		String applicable_patch_id = StringUtils.isBlank(emp.getApplicable_patch_id()) ? DEFAULT_APPLICABLE_PATCH_ID : emp.getApplicable_patch_id();
-		String patch_compliance = StringUtils.isBlank(emp.getPatch_compliance()) ? DEFAULT_PATCH_COMPLIANCE : emp.getPatch_compliance();		
-	    String date_of_completion = StringUtils.isBlank(emp.getDate_of_completion()) ? DEFAULT_DATE_COMPLETION : "'" + emp.getDate_of_completion() + "'";		
+		String patch_compliance = StringUtils.isBlank(emp.getPatch_compliance()) ? DEFAULT_PATCH_UNCOMPLIANCE : emp.getPatch_compliance();		
+	    String date_of_completion = StringUtils.isBlank(emp.getDate_of_completion()) ? DEFAULT_DATE_UNCOMPLETION : "'" + emp.getDate_of_completion() + "'";		
 
 	    
 	    String query = "INSERT INTO `springbootdb`.`Employee` (`roll_no`, `emp_name`, `emp_region`, `applicable_patch_id`, `patch_compliance`, `date_of_completion`, `e_mail_id`) VALUES ('"
@@ -202,11 +202,11 @@ public class UserManagementService {
 	    // Create a comma-separated list of slot IDs
 	    String slotIds = String.join(",", slotIdList);
 
-	    String query = "DELETE FROM `springbootdb`.`Employee` WHERE id IN (" + slotIds + ");";
+	    String query = "DELETE FROM `springbootdb`.`Employee` WHERE roll_no IN (" + slotIds + ");";
 
 	    jdbc.execute(query);
 
-	    return "Admin entries " + slotIdList + " deleted successfully";
+	    return "Employee entries " + slotIdList + " deleted successfully";
 	}
 
 	
@@ -232,7 +232,7 @@ public class UserManagementService {
 	    // Create a comma-separated list of slot IDs
 	    String slotIds = String.join(",", slotIdList);
 
-	    String query = "DELETE FROM `springbootdb`.`ADMIN` WHERE id IN (" + slotIds + ");";
+	    String query = "DELETE FROM `springbootdb`.`ADMIN` WHERE roll_no IN (" + slotIds + ");";
 
 	    jdbc.execute(query);
 
