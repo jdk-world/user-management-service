@@ -43,7 +43,7 @@ spec:
     spec:
       containers:
       - name: user-management-service-ver1
-        image: docker.io/saurabh2204/user-management-service:latest
+        image: gcr.io/dulcet-listener-317509/user-management-service:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8898
